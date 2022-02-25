@@ -62,6 +62,22 @@ class UserController extends Controller {
       data: detail,
     };
   }
+
+
+  // 创建用户
+  async create() {
+    // 写入数据库，this.ctx.request.body：可以拿到用户输入的username、nickname
+    console.log(this.ctx.request.body);
+    // 参数验证
+    // 成功
+    this.ctx.body = {
+      msg: 'ok',
+      data: {
+        username: '用户名',
+        nickname: '昵称',
+      },
+    };
+  }
 }
 
 module.exports = UserController;

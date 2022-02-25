@@ -39,3 +39,37 @@ async index() {
 }
 ```
 
+# 关闭csrf开启跨域
+（post请求会跨域）
+文档：https://www.npmjs.com/package/egg-cors
+
+- 安装  npm i egg-cors --save
+- 配置插件
+
+```js
+// {app_root}/config/plugin.js
+exports.cors = {
+  enable: true,
+  package: 'egg-cors',
+};
+```
+
+- config / config.default.js 目录下配置
+
+```js
+  config.security = {
+    // 关闭 csrf
+    csrf: {
+      enable: false,
+    },
+     // 跨域白名单
+    domainWhiteList: [ 'http://localhost:3000' ],
+  };
+  // 允许跨域的方法
+  config.cors = {
+    origin: '*',
+    allowMethods: 'GET, PUT, POST, DELETE, PATCH'
+  };
+```
+
+# 

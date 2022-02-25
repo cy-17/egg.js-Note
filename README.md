@@ -1,3 +1,5 @@
+https://www.eggjs.org/zh-CN/basics
+
 安装egg.js
 
 ```
@@ -21,4 +23,19 @@ npm run dev
 open http://localhost:7001
 ```
 
-#
+## 创建控制器
+
+```js
+async index() {
+    const { ctx } = this;
+    // 获取路由get传值参数（路由:id）
+    ctx.params;
+    // 获取url的问号get传值参数
+    ctx.query;
+    // 响应
+    ctx.body = '响应';
+    // 状态码
+	ctx.status = 201;
+}
+```
+

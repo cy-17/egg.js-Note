@@ -8,10 +8,11 @@ class HomeController extends Controller {
     ctx.body = 'hello world';
   }
 
+  // 1、写list方法
   async list() {
     this.ctx.body = {
-      msg: "ok",
-      data: [1, 2, 3, 4, 5, 6, 7]
+      msg: 'ok',
+      data: [ 1, 2, 3, 4, 5, 6, 7 ],
     };
   }
 }

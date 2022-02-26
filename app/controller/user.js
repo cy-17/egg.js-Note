@@ -69,12 +69,45 @@ class UserController extends Controller {
     // 写入数据库
 
     // 新增单个
-    const res = await this.app.model.User.create({
-      username: 'ceshi',
-      password: '123456',
-      sex: '男',
-    });
+    // const res = await this.app.model.User.create({
+    //   username: 'ceshi',
+    //   password: '123456',
+    //   sex: '男',
+    // });
 
+    // 批量新增
+    const res = await this.app.model.User.bulkCreate([
+      {
+        username: '用户1',
+        password: '密码1',
+        sex: '男',
+      },
+      {
+        username: '用户2',
+        password: '密码2',
+        sex: '男',
+      },
+      {
+        username: '用户3',
+        password: '密码3',
+        sex: '男',
+      },
+      {
+        username: '用户4',
+        password: '密码4',
+        sex: '男',
+      },
+      {
+        username: '用户5',
+        password: '密码5',
+        sex: '男',
+      },
+      {
+        username: '用户6',
+        password: '密码6',
+        sex: '男',
+      },
+    ]);
 
     // 参数验证
     // 成功

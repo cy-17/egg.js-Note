@@ -154,3 +154,147 @@ module.exports = app => {
   app.router.get('/admin/log', app.controller.admin.log);
 };
 ```
+
+# 数据库
+
+## 配置和创建迁移文件
+
+### 配置
+
+
+
+1. 安装并配置[egg-sequelize](https://github.com/eggjs/egg-sequelize)插件（它会辅助我们将定义好的 Model 对象加载到 app 和 ctx 上）和[mysql2](https://github.com/sidorares/node-mysql2)模块：
+
+```js
+npm install --save egg-sequelize mysql2
+```
+
+2. 在`config/plugin.js`中引入 egg-sequelize 插件
+
+```
+exports.sequelize = {
+  enable: true,
+  package: 'egg-sequelize',
+};
+```
+
+3. 在`config/config.default.js`
+
+```js
+config.sequelize = {
+    dialect:  'mysql',
+    host:  '127.0.0.1',
+    username: 'root',
+    password:  'root',
+    port:  3306,
+    database:  'eggapi',
+    // 中国时区
+    timezone:  '+08:00',
+    define: {
+        // 取消数据表名复数
+        freezeTableName: true,
+        // 自动写入时间戳 created_at updated_at
+        timestamps: true,
+        // 字段生成软删除时间戳 deleted_at
+        paranoid: true,
+        createdAt: 'created_at',
+        updatedAt: 'updated_at',
+        deletedAt: 'deleted_at',
+        // 所有驼峰命名格式化
+        underscored: true
+    }
+};
+```
+
+4. sequelize 提供了[sequelize-cli](https://github.com/sequelize/cli)工具来实现[Migrations](http://docs.sequelizejs.com/manual/tutorial/migrations.html)，我们也可以在 egg 项目中引入 sequelize-cli。
+
+```js
+npm install --save-dev sequelize-cli
+```
+
+5.  egg 项目中，我们希望将所有数据库 Migrations 相关的内容都放在`database`目录下，所以我们在项目根目录下新建一个`.sequelizerc`配置文件：
+
+```js
+'use strict';
+
+const path = require('path');
+
+module.exports = {
+  config: path.join(__dirname, 'database/config.json'),
+  'migrations-path': path.join(__dirname, 'database/migrations'),
+  'seeders-path': path.join(__dirname, 'database/seeders'),
+  'models-path': path.join(__dirname, 'app/model'),
+};
+```
+
+6. 初始化 Migrations 配置文件和目录
+
+```js
+npx sequelize init:config
+npx sequelize init:migrations	//放迁移文件的地方
+// npx sequelize init:models
+```
+
+7. 行完后会生成`database/config.json`文件和`database/migrations`目录，我们修改一下`database/config.json`中的内容，将其改成我们项目中使用的数据库配置：
+
+```json
+{
+  "development": {
+    "username": "root",
+    "password": null,
+    "database": "eggapi",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "timezone": "+08:00"
+  }
+}
+```
+
+8. 创建数据库
+
+```js
+npx sequelize db:create
+```
+
+### 创建数据迁移表
+
+```js
+npx sequelize migration:generate --name=init-user
+```
+
+1.执行完命令后，会在database / migrations / 目录下生成数据表迁移文件，然后定义
+
+```js
+'use strict';
+
+module.exports = {
+    up: async (queryInterface, Sequelize) => {
+        const { INTEGER, STRING, DATE, ENUM } = Sequelize;
+        // 创建表
+        await queryInterface.createTable('user', {
+            id: { type: INTEGER(20).UNSIGNED, primaryKey: true, autoIncrement: true },
+            username: { type: STRING(30), allowNull: false, defaultValue: '', comment: '用户名称', unique: true},
+            password: { type: STRING(200), allowNull: false, defaultValue: '' },
+            avatar_url: { type: STRING(200), allowNull: true, defaultValue: '' },
+            sex: { type: ENUM, values: ['男','女','保密'], allowNull: true, defaultValue: '男', comment: '用户性别'},
+            created_at: DATE,
+            updated_at: DATE
+        });
+    },
+
+    down: async queryInterface => {
+        await queryInterface.dropTable('user')
+    }
+};
+```
+
+- 执行 migrate 进行数据库变更
+
+```php
+# 升级数据库
+npx sequelize db:migrate
+# 如果有问题需要回滚，可以通过 `db:migrate:undo` 回退一个变更
+# npx sequelize db:migrate:undo
+# 可以通过 `db:migrate:undo:all` 回退到初始状态
+# npx sequelize db:migrate:undo:all
+```

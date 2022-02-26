@@ -2,28 +2,6 @@
 
 const Controller = require('egg').Controller;
 
-// 假装是数据库获取来的数据：
-const demo = [{
-  id: 1,
-  username: '用户名1',
-  nickname: '昵称',
-  sex: '男',
-}, {
-  id: 2,
-  username: '用户名2',
-  nickname: '昵称',
-  sex: '男',
-}, {
-  id: 3,
-  username: '用户名3',
-  nickname: '昵称',
-  sex: '男',
-}, {
-  id: 4,
-  username: '用户名4',
-  nickname: '昵称',
-  sex: '男',
-}];
 class UserController extends Controller {
   // 用户列表
   async index() {
@@ -53,10 +31,26 @@ class UserController extends Controller {
   //     }
   // }
   async read() {
-    // 获取url中的id值
-    const id = this.ctx.params.id;
-    // 在数据中找到用户信息
-    const detail = demo.find(item => item.id === Number(id));
+    const id = parseInt(this.ctx.params.id);
+    // let detail = demo.find(item => item.id == id);
+
+    // 通过主键查询单个数据
+    // const detail = await this.app.model.User.findByPk(id);
+    // if (!detail) {
+    //   return this.ctx.body = {
+    //     msg: 'fail',
+    //     data: '用户不存在',
+    //   };
+    // }
+
+    // 查询单个，多个要求
+    const detail = await this.app.model.User.findOne({
+      where: {
+        id,
+        sex: '女',
+      },
+    });
+
     this.ctx.body = {
       msg: 'ok',
       data: detail,

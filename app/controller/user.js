@@ -66,17 +66,20 @@ class UserController extends Controller {
 
   // 创建用户
   async create() {
-    // 写入数据库，this.ctx.request.body：可以拿到用户输入的username、nickname
-    console.log(this.ctx.request.body);
+    // 写入数据库
+
+    // 新增单个
+    const res = await this.app.model.User.create({
+      username: 'ceshi',
+      password: '123456',
+      sex: '男',
+    });
+
+
     // 参数验证
     // 成功
-    this.ctx.body = {
-      msg: 'ok',
-      data: {
-        username: '用户名',
-        nickname: '昵称',
-      },
-    };
+    this.ctx.body = res;
+
   }
 }
 

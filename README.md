@@ -72,4 +72,85 @@ exports.cors = {
   };
 ```
 
-# 
+## 编写路由
+
+### 基础用法
+
+```js
+// router.js
+router.get('/admin/:id', controller.admin.index);
+
+// controller
+async index() {
+    const { ctx } = this;
+    // 获取路由get传值参数（路由:id）
+    ctx.params;
+    // 获取url的问号get传值参数
+    ctx.query;
+}
+```
+
+### 资源路由
+
+```js
+// app/router.js
+module.exports = app => {
+  const { router, controller } = app;
+  router.resources('posts', '/api/posts', controller.posts);
+  // app/controller/v1/users.js
+  router.resources('users', '/api/v1/users', controller.v1.users); 
+};
+```
+
+上面代码就在 `/posts` 路径上部署了一组 CRUD 路径结构，对应的 Controller 为 `app/controller/posts.js` 接下来， 你只需要在 `posts.js` 里面实现对应的函数就可以了。
+
+| Method | Path            | Route Name | Controller.Action             |
+| ------ | --------------- | ---------- | ----------------------------- |
+| GET    | /posts          | posts      | app.controllers.posts.index   |
+| GET    | /posts/new      | new_post   | app.controllers.posts.new     |
+| GET    | /posts/:id      | post       | app.controllers.posts.show    |
+| GET    | /posts/:id/edit | edit_post  | app.controllers.posts.edit    |
+| POST   | /posts          | posts      | app.controllers.posts.create  |
+| PUT    | /posts/:id      | post       | app.controllers.posts.update  |
+| DELETE | /posts/:id      | post       | app.controllers.posts.destroy |
+
+```js
+// app/controller/posts.js
+
+// 列表页
+exports.index = async () => {};
+// 新增表单页
+exports.new = async () => {};
+// 新增逻辑
+exports.create = async () => {};
+// 详情页
+exports.show = async () => {};
+// 编辑表单页
+exports.edit = async () => {};
+// 更新逻辑
+exports.update = async () => {};
+// 删除逻辑
+exports.destroy = async () => {};
+```
+
+### 路由分组
+
+```js
+// app/router.js
+module.exports = app => {
+  require('./router/news')(app);
+  require('./router/admin')(app);
+};
+
+// app/router/news.js
+module.exports = app => {
+  app.router.get('/news/list', app.controller.news.list);
+  app.router.get('/news/detail', app.controller.news.detail);
+};
+
+// app/router/admin.js
+module.exports = app => {
+  app.router.get('/admin/user', app.controller.admin.user);
+  app.router.get('/admin/log', app.controller.admin.log);
+};
+```

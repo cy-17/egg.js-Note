@@ -381,3 +381,50 @@ config.errorHandler = {
 };
 ```
 
+# 参数验证
+
+https://www.npmjs.com/package/egg-valparams
+
+```
+npm i egg-valparams --save
+```
+
+```js
+// config/plugin.js
+valparams : {
+  enable : true,
+  package: 'egg-valparams'
+},
+// config/config.default.js
+config.valparams = {
+    locale    : 'zh-cn',
+    throwError: false
+};
+```
+
+```js
+class XXXController extends app.Controller {
+  // ...
+  async XXX() {
+    const {ctx} = this;
+    ctx.validate({
+      system  : {type: 'string', required: false, defValue: 'account', desc: '系统名称'},
+      token   : {type: 'string', required: true, desc: 'token 验证'},
+      redirect: {type: 'string', required: false, desc: '登录跳转'}
+    });
+    // if (config.throwError === false)
+    if(ctx.paramErrors) {
+      // get error infos from `ctx.paramErrors`;
+    }
+    let params = ctx.params;
+    let {query, body} = ctx.request;
+    // ctx.params        = validater.ret.params;
+    // ctx.request.query = validater.ret.query;
+    // ctx.request.body  = validater.ret.body;
+    // ...
+    ctx.body = query;
+  }
+  // ...
+}
+```
+

@@ -95,7 +95,28 @@ class UserController extends Controller {
 
   // 创建用户
   async create() {
+    // 参数验证
     // 写入数据库
+    // this.ctx.throw(500, '故意出错');
+    // 参数验证
+    this.ctx.validate({
+      username: {
+        type: 'string',
+        required: true,
+        desc: '用户名',
+      },
+      password: {
+        type: 'string',
+        required: true,
+        desc: '密码',
+      },
+      sex: {
+        type: 'string',
+        required: false,
+        defValue: '男',
+        desc: '性别',
+      },
+    });
 
     // 新增单个
     // const res = await this.app.model.User.create({

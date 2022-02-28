@@ -16,4 +16,8 @@ module.exports = {
     enable: true,
     package: 'egg-sequelize',
   },
+  valparams: {
+    enable: true,
+    package: 'egg-valparams',
+  },
 };

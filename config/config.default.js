@@ -70,6 +70,11 @@ module.exports = appInfo => {
     },
   };
 
+  config.valparams = {
+    locale: 'zh-cn',
+    throwError: true,
+  };
+
   return {
     ...config,
     ...userConfig,

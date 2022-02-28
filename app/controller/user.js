@@ -8,18 +8,33 @@ class UserController extends Controller {
     // 拿到数据
     let result = [];
 
+    // 分页功能
+    const page = this.ctx.query.page ? parseInt(this.ctx.query.page) : 1;// 获取url的?page=页码
+    const limit = 5;// 限制每页5条数据
+    const offset = (page - 1) * 5;// 偏移多少页，获取从offset开始的limit条数据
     // 查询多个
     const Op = this.app.Sequelize.Op; // 固定写法，使用数据库查询的Op方法
     result = await this.app.model.User.findAll({
       where: {
-        sex: '男',
-        username: {
-          [Op.like]: '%用户%', // like：模糊匹配
-        },
-        id: {
-          [Op.gt]: 6, // id>6
-        },
+      //   sex: '男',
+      //   username: {
+      //     [Op.like]: '%用户%', // like：模糊匹配
+      //   },
+      //   id: {
+      //     [Op.gt]: 6, // id>6
+      //   },
       },
+      // attributes: ['id', 'username', 'sex'],
+      attributes: {
+        // 按照条件检索时排除检索password字段的内容
+        exclude: [ 'password' ],
+      },
+      order: [
+        [ 'updated_at', 'DESC' ],
+        [ 'id', 'DESC' ],
+      ],
+      offset,
+      limit,
     });
     // 查询多个并计数
     // result = await this.app.model.User.findAndCountAll();

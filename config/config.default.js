@@ -15,8 +15,8 @@ module.exports = appInfo => {
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1579788120104_5194';
 
-  // add your middleware config here
-  config.middleware = [];
+  // add your middleware config here 访问路由的时候会首先找的中间件
+  config.middleware = [ 'errorHandler' ];
 
   // add your user config here
   const userConfig = {

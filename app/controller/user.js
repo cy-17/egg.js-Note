@@ -8,6 +8,9 @@ class UserController extends Controller {
     // 拿到数据
     let result = [];
 
+    // 【应用】验证用户登录状态时抛出异常就不用return再判断
+    this.ctx.throw(500, '故意出错');
+
     // 分页功能
     const page = this.ctx.query.page ? parseInt(this.ctx.query.page) : 1;// 获取url的?page=页码
     const limit = 5;// 限制每页5条数据

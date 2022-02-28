@@ -6,16 +6,22 @@ class UserController extends Controller {
   // 用户列表
   async index() {
     // 拿到数据
-    const result = demo;
+    let result = [];
+
+    // 查询多个
+    // result = await this.app.model.User.findAll();
+    // 查询多个并计数
+    result = await this.app.model.User.findAndCountAll();
+
     // 获取url的问号get传值参数，如http://127.0.0.1:7001/user/list?page=1
-    this.ctx.query.page;
+    // this.ctx.query.page;
     // 响应
     this.ctx.body = {
       msg: 'ok',
       data: result,
     };
     // 修改状态码
-    this.ctx.status = 201;
+    // this.ctx.status = 200;
   }
 
 

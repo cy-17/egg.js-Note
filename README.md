@@ -353,3 +353,31 @@ module.exports = (option, app) => {
     };
   };
 ```
+
+# 中间件
+
+```js
+config.middleware = ['errorHandler'];
+
+config.errorHandler = {
+    ceshi: 123,
+    // 通用配置（以下是重点）
+    enable:true, // 控制中间件是否开启。
+    match:'/news', // 设置只有符合某些规则的请求才会经过这个中间件（匹配路由）
+    ignore:'/shop' // 设置符合某些规则的请求不经过这个中间件。
+
+    /**
+        注意：
+        1. match 和 ignore 不允许同时配置
+        2. 例如：match:'/news'，只要包含/news的任何页面都生效
+        **/
+
+    // match 和 ignore 支持多种类型的配置方式：字符串、正则、函数（推荐）
+    match(ctx) {
+        // 只有 ios 设备才开启
+        const reg = /iphone|ipad|ipod/i;
+        return reg.test(ctx.get('user-agent'));
+    },
+};
+```
+

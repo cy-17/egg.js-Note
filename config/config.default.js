@@ -17,6 +17,12 @@ module.exports = appInfo => {
 
   // add your middleware config here 访问路由的时候会首先找的中间件
   config.middleware = [ 'errorHandler' ];
+  // 中间件配置
+  config.errorHandler = {
+    // enable: false,// 控制中间件是否开启。
+    // match: ["/user/list", '/user/read'],// 设置只有符合某些规则的请求才会经过这个中间件（匹配路由）
+    // ignore: ['/user/list']// 设置符合某些规则的请求不经过这个中间件。
+  };
 
   // add your user config here
   const userConfig = {

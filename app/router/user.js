@@ -9,4 +9,7 @@ module.exports = app => {
   router.post('/user/create', controller.user.create);
   // 修改
   router.post('/user/update/:id', controller.user.update);
+  // 删除
+  router.post('/user/delete/:id', controller.user.destroy);
+  // router.get('/user/delete', controller.user.destroy);
 };

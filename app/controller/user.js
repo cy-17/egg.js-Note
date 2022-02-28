@@ -140,6 +140,42 @@ class UserController extends Controller {
     this.ctx.body = res;
 
   }
+
+
+  // http://127.0.0.1:7001/user/update/1
+  async update() {
+    const id = this.ctx.params.id ? parseInt(this.ctx.params.id) : 0;
+    // 拿到这条记录
+    const data = await this.app.model.User.findByPk(id);
+    if (!data) {
+      return this.ctx.body = {
+        msg: 'fail',
+        data: '该记录不存在',
+      };
+    }
+
+    data.username = '被修改了';
+
+    data.sex = '男';
+
+    // 限制只能修改username字段，无法修改数据库中的其他的字段
+    // 【应用】：限制不能修改密码字段
+    // let res = await data.save({
+    //     fields: ['username']
+    // });
+
+    const params = this.ctx.request.body;
+    const res = await data.update(params, {
+      fields: [ 'username' ],
+    });
+
+    this.ctx.body = {
+      msg: 'ok',
+      data: res,
+    };
+
+  }
+
 }
 
 module.exports = UserController;

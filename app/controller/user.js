@@ -9,9 +9,20 @@ class UserController extends Controller {
     let result = [];
 
     // 查询多个
-    // result = await this.app.model.User.findAll();
+    const Op = this.app.Sequelize.Op; // 固定写法，使用数据库查询的Op方法
+    result = await this.app.model.User.findAll({
+      where: {
+        sex: '男',
+        username: {
+          [Op.like]: '%用户%', // like：模糊匹配
+        },
+        id: {
+          [Op.gt]: 6, // id>6
+        },
+      },
+    });
     // 查询多个并计数
-    result = await this.app.model.User.findAndCountAll();
+    // result = await this.app.model.User.findAndCountAll();
 
     // 获取url的问号get传值参数，如http://127.0.0.1:7001/user/list?page=1
     // this.ctx.query.page;
